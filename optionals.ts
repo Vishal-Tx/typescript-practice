@@ -41,3 +41,10 @@ console.log(findEmailnew({name:"vishal Gupta", info:{email:"vishal"}}))
 console.log(findEmailEasy({name:"vishal Gupta", info:{email:"vishal"}}))
 
 // optional Callbacks
+
+function addWithCallback(x:number, y:number, callback?:()=>void){
+    console.log([x,y]);
+    callback?.()
+}
+
+addWithCallback(2,3,()=>console.log("yolo"))
