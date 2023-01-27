@@ -12,7 +12,7 @@ return numbers.map(mutate)
 console.log(mutateArray([1,2,3], (v)=>v*10))
 
 
-export const createAdder = (v:number):(val: number) => number=>{
+export const createAdder = (v:number):mutationFunction=>{
     return (val:number)=>val+v
 }
 
