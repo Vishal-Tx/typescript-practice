@@ -46,7 +46,7 @@ interface coordinate{
 
 function parseCoordinates(obj:coordinate):coordinate;
 function parseCoordinates(x:number, y:number):coordinate;
-function parseCoordinates(arg1:string):coordinate;
+function parseCoordinates(str:string):coordinate;
 
 function parseCoordinates(arg1:unknown, arg2?:unknown):coordinate{
     let coord:coordinate = {
