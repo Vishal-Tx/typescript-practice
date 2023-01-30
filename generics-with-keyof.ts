@@ -9,6 +9,9 @@ const dogs = [{name:"fifi", age:4},{name:"Kion", age:6},{name:"Plol", age:8},{na
 console.log(pluck(dogs, "age"))
 console.log(pluck(dogs, "name"))
 
+console.log(pluck([{id:"1445", age:"23"}], "age"))
+
+
 
 interface BaseEvent{
     time:number;
