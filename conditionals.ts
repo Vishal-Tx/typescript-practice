@@ -8,12 +8,26 @@ interface PokemonResults {
         url:string;
     }[];
 
-}
-async function fetching ():Promise<PokemonResults>{
-const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=10")
-console.log(res.data)
-const {next, results} = res.data;
-return {next, results}
+    
 }
 
-fetching()
+type fetchingPokemonResult<T> = T extends undefined?Promise<PokemonResults>:void
+
+const fetchingPokemon = async<T extends undefined | ((data:PokemonResults)=>void)>(url:string, cb?:T):Promise<fetchingPokemonResult<T>>=>{
+if(cb){
+    const {data}= await axios.get(url)
+    console.log("hit")
+    cb(data)
+    return undefined as fetchingPokemonResult<T>;
+}
+else{
+    const response = await axios.get(url)
+    console.log("hir")
+    return response?.data as fetchingPokemonResult<T>
+}
+
+}
+
+fetchingPokemon("https://pokeapi.co/api/v2/pokemon?limit=10", (res)=>{
+res.results.forEach((pokemon)=>{console.log(pokemon.name)})
+})

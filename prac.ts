@@ -1,3 +1,5 @@
+import axios from "axios";
+
 interface MySelf{
      name: string;
     age: number;
@@ -18,3 +20,12 @@ console.log(vishal)
 vishal.name = "Harry"
 console.log(vishal)
 
+
+// const fetching = async ()=>{
+//     const res = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=10")
+//     console.log(res)
+// }
+
+
+
+// fetching()
