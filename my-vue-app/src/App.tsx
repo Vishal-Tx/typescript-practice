@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useReducer, useState } from 'react'
+import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import "./App.css"
 import axios from 'axios'
 
@@ -39,7 +39,7 @@ const App = () => {
     alert(item)
   },[])
 
-  const [state, dispatch] = useReducer((todos:Todo[],action:ActionType)=>{
+  const [todos, dispatch] = useReducer((state:Todo[],action:ActionType)=>{
 switch(action.type){
   case "ADD": return[...state,{
     id:state.length,
@@ -50,6 +50,19 @@ switch(action.type){
   default: throw new Error("Invalid action type")
 }
   },[])
+
+
+  const newTodoRef = useRef<HTMLInputElement>(null);
+
+  const onaddTodo = useCallback(()=>{
+    if(newTodoRef.current){
+    dispatch({type:"ADD", text:newTodoRef.current.value})
+    newTodoRef.current.value = "";}
+    else return
+    
+  },[])
+
+  
   return (
     <div><Heading title = "Hello"/>
     <Box>Hello there</Box>
@@ -59,9 +72,13 @@ switch(action.type){
     {todos.map(todo=>( 
       <div key = {todo.id}>
         {todo.text}
-        <button onClick={()=>dispatch({type:""})}>remove</button>
+        <button onClick={()=>dispatch({type:"remove", id:todo.id})}>remove</button>
       </div>
     ))}
+    <div>
+    <input  type="text" ref={newTodoRef}/>
+    <button onClick={onaddTodo}>Add</button>
+    </div>
     </div>
   )
 }
