@@ -2,7 +2,11 @@ import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, u
 import "./App.css"
 import axios from 'axios'
 
-const Heading = ({title}:{title:string})=>{
+type heading={
+  title:string
+}
+
+const Heading = ({title}:heading)=>{
   return <h1>{title}</h1>
 }
 
