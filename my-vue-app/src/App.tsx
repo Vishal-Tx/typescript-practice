@@ -1,6 +1,8 @@
-import React, { Children, PropsWithChildren, useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import React, { Children, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 import "./App.css"
 import axios from 'axios'
+import Button from './components/Button'
+import { useTodos } from './useTodos'
 
 type heading={
   title:string
@@ -18,9 +20,9 @@ const Box:React.FC<PropsWithChildren>= ({children})=>{
   return <div style={{color:"brown"}}>{children}</div>
 }
 
-const Button:React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>&{title?:string}>=({children,style, title, ...rest})=>(
-<button {...rest} style={{...style, backgroundColor:"red"}}>{title ?? children}</button>
-)
+// const Button:React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>&{title?:string}>=({children,style, title, ...rest})=>(
+// <button {...rest} style={{...style, backgroundColor:"red"}}>{title ?? children}</button>
+// )
 
 const List:React.FC<{items:string[],onClick?:(item:string)=>void}>= ({items, onClick})=>(
   <ul>
@@ -41,12 +43,7 @@ interface Payload{
   text:string;
 }
 
-interface Todo{
-  id:number;
-  done:boolean;
-  text:string;
-}
-type ActionType = |{type:"ADD",text:string} | {type:"remove",id:number}
+
 
 
 
@@ -55,6 +52,8 @@ type ActionType = |{type:"ADD",text:string} | {type:"remove",id:number}
 
 
 const App = () => {
+
+  const {addTodo, removeTodo, todos} = useTodos([{id:0,text:"Hello there", done:false}])
   const [payload, setPayload] = useState<Payload | null>(null)
 
   useEffect(() => {
@@ -65,28 +64,18 @@ const App = () => {
     alert(item)
   },[])
 
-  const [todos, dispatch] = useReducer((state:Todo[],action:ActionType)=>{
-switch(action.type){
-  case "ADD": return[...state,{
-    id:state.length,
-    text:action.text,
-    done:false
-  }]
-  case "remove":return state.filter(({id})=>id!==action.id)
-  default: throw new Error("Invalid action type")
-}
-  },[])
+  
 
 
   const newTodoRef = useRef<HTMLInputElement>(null);
 
   const onaddTodo = useCallback(()=>{
     if(newTodoRef.current){
-    dispatch({type:"ADD", text:newTodoRef.current.value})
+      addTodo(newTodoRef.current.value)
     newTodoRef.current.value = "";}
     else return
     
-  },[])
+  },[addTodo])
 
 
   const [value, setvalue] = useValue(0)
@@ -100,12 +89,12 @@ switch(action.type){
     {todos.map(todo=>( 
       <div key = {todo.id}>
         {todo.text}
-        <Button onClick={()=>dispatch({type:"remove", id:todo.id})}>remove</Button>
+        <Button onClick={()=>removeTodo(todo.id)} title={"remove"}/>
       </div>
     ))}
     <div>
     <input  type="text" ref={newTodoRef}/>
-    <Button onClick={onaddTodo}>Add</Button>
+    <Button onClick={onaddTodo} title={"add"} />
     </div>
     <IncrementFunc value={value} setvalue={setvalue}/>
     </div>
